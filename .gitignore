@@ -1,0 +1,12 @@
+# Build output
+/build/
+/out/
+
+# IDE
+.vscode/
+.idea/
+*.user
+
+# OS junk
+.DS_Store
+Thumbs.db
