@@ -13,5 +13,11 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL3)
 
-add_executable(MinecraftClone src/main.cpp)
+add_executable(
+    MinecraftClone 
+    src/main.cpp
+    src/core/SDLContext.cpp
+    src/core/Window.cpp
+    src/core/Application.cpp
+    )   
 target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static)
