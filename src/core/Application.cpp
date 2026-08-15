@@ -1,4 +1,5 @@
 #include "Application.h"
+#include <glad/gl.h>
 #include <SDL3/SDL.h>
 #include <cstdio>
 
@@ -11,6 +12,9 @@ Application::Application()
 void Application::run() {
     while (m_running) {
         ProcessEvents();
+
+        glClear(GL_COLOR_BUFFER_BIT);
+        SDL_GL_SwapWindow(m_window.handle());
     }
 }
 
