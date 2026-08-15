@@ -19,5 +19,6 @@ add_executable(
     src/core/SDLContext.cpp
     src/core/Window.cpp
     src/core/Application.cpp
+    src/core/GLContext.cpp
     )   
 target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static)

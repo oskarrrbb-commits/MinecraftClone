@@ -4,6 +4,7 @@
 
 Application::Application()
     : m_window("MinecraftClone", 1280, 720)
+    , m_glContext(m_window)
 {
 }
 
