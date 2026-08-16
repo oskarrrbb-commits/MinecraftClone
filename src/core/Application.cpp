@@ -7,6 +7,8 @@ Application::Application()
     : m_window("MinecraftClone", 1280, 720)
     , m_glContext(m_window)
 {
+    glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
+
 }
 
 void Application::run() {
