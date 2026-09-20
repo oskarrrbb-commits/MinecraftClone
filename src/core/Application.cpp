@@ -2,6 +2,9 @@
 #include <glad/gl.h>
 #include <SDL3/SDL.h>
 #include <cstdio>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 const char* vertexShaderSource = R"(
 #version 330 core
@@ -9,9 +12,10 @@ layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
 
 out vec3 vertexColor;
+uniform mat4 model;
 
 void main() {
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = model *vec4(aPos, 1.0);
     vertexColor = aColor;
 
 }
@@ -95,6 +99,12 @@ void Application::run() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(m_shaderProgram);
         glBindVertexArray(m_vao);
+        float time = SDL_GetTicks() / 1000.0f;
+        glm::mat4 model = glm::rotate(glm::mat4(1.0f), time, glm::vec3(0.5f, 1.0f, 0.0f));
+
+        int modelLoc = glGetUniformLocation(m_shaderProgram, "model");
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT, 0);
         SDL_GL_SwapWindow(m_window.handle());
     }
