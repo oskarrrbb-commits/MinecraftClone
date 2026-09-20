@@ -13,9 +13,11 @@ layout (location = 1) in vec3 aColor;
 
 out vec3 vertexColor;
 uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main() {
-    gl_Position = model *vec4(aPos, 1.0);
+    gl_Position = projection * view * model * vec4(aPos, 1.0);
     vertexColor = aColor;
 
 }
@@ -104,7 +106,16 @@ void Application::run() {
 
         int modelLoc = glGetUniformLocation(m_shaderProgram, "model");
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
 
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
+
+        int viewLoc = glGetUniformLocation(m_shaderProgram, "view");
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+        int projLoc = glGetUniformLocation(m_shaderProgram, "projection");
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        
         glDrawElements(GL_TRIANGLES,36,GL_UNSIGNED_INT, 0);
         SDL_GL_SwapWindow(m_window.handle());
     }
