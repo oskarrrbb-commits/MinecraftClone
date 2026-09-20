@@ -15,6 +15,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SDL3)
 
+FetchContent_Declare(
+    glm
+    GIT_REPOSITORY https://github.com/g-truc/glm.git
+    GIT_TAG 1.0.1
+)
+FetchContent_MakeAvailable(glm)
 add_library(glad STATIC external/glad/src/gl.c)
 target_include_directories(glad PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include
@@ -30,4 +36,4 @@ add_executable(MinecraftClone
 target_include_directories(MinecraftClone PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include
 )
-target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static glad)
+target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static glad glm::glm)
