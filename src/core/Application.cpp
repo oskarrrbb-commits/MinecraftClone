@@ -36,7 +36,9 @@ void main() {
 Application::Application()
     : m_window("MinecraftClone", 1280, 720)
     , m_glContext(m_window)
+    , m_camera()
 {
+    SDL_SetWindowRelativeMouseMode(m_window.handle(), true);
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glGenVertexArrays(1, &m_vao);
@@ -131,6 +133,9 @@ void Application::ProcessEvents() {
     while (SDL_PollEvent(&event)) {
         if (event.type == SDL_EVENT_QUIT) {
             m_running = false;
+        }
+        if (event.type == SDL_EVENT_MOUSE_MOTION) {
+            m_camera.ProcessMouseMovement(event.motion.xrel, event.motion.yrel);
         }
     }
 }
