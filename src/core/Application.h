@@ -3,6 +3,7 @@
 #include "SDLContext.h"
 #include "GLContext.h"
 #include "../renderer/Camera.h"
+#include <SDL3/SDL.h>
 
 class Application {
 public:
@@ -57,6 +58,7 @@ private:
     unsigned int m_vbo = 0;
     unsigned int m_shaderProgram = 0;
     unsigned int m_ebo = 0;
-
+    Uint64 m_lastFrameTime = 0;
+    float m_deltaTime = 0.0f;
     void ProcessEvents();
 };
