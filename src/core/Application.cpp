@@ -98,6 +98,9 @@ Application::Application()
 
 void Application::run() {
     while (m_running) {
+        Uint64 currentTime = SDL_GetTicks();
+        m_deltaTime = (currentTime - m_lastFrameTime) / 1000.0f;
+        m_lastFrameTime = currentTime;
         const bool* keyState = SDL_GetKeyboardState(nullptr);
         m_camera.processKeyboard(keyState, m_deltaTime);
         
@@ -106,9 +109,7 @@ void Application::run() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glUseProgram(m_shaderProgram);
         glBindVertexArray(m_vao);
-        Uint64 currentTime = SDL_GetTicks();
-        m_deltaTime = (currentTime - m_lastFrameTime) / 1000.0f;
-        m_lastFrameTime = currentTime;
+        
         glm::mat4 model =glm::mat4(1.0f); //glm::rotate(glm::mat4(1.0f), time, glm::vec3(0.5f, 1.0f, 0.0f));
 
         int modelLoc = glGetUniformLocation(m_shaderProgram, "model");
