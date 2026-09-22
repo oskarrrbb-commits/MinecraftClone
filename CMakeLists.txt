@@ -31,6 +31,7 @@ add_executable(MinecraftClone
     src/core/SDLContext.cpp
     src/core/Window.cpp
     src/core/GLContext.cpp
+    src/renderer/Camera.cpp
     src/core/Application.cpp
 )
 target_include_directories(MinecraftClone PRIVATE

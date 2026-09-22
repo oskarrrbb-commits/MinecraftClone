@@ -102,11 +102,11 @@ void Application::run() {
         glUseProgram(m_shaderProgram);
         glBindVertexArray(m_vao);
         float time = SDL_GetTicks() / 1000.0f;
-        glm::mat4 model = glm::rotate(glm::mat4(1.0f), time, glm::vec3(0.5f, 1.0f, 0.0f));
+        glm::mat4 model =glm::mat4(1.0f); //glm::rotate(glm::mat4(1.0f), time, glm::vec3(0.5f, 1.0f, 0.0f));
 
         int modelLoc = glGetUniformLocation(m_shaderProgram, "model");
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+        glm::mat4 view = m_camera.getViewMatrix();
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
 

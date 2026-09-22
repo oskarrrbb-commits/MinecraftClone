@@ -2,6 +2,7 @@
 #include "Window.h"
 #include "SDLContext.h"
 #include "GLContext.h"
+#include "../renderer/Camera.h"
 
 class Application {
 public:
@@ -11,6 +12,7 @@ private:
     SDLContext m_sdl;
     Window m_window;
     GLContext m_glContext;
+    Camera m_camera;
     bool m_running = true;
     float m_cubeVertices[144] = {
         -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
