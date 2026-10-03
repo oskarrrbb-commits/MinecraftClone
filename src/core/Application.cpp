@@ -55,8 +55,11 @@ glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(float), mesh.vertice
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_chunkEbo);
 glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(unsigned int), mesh.indices.data(), GL_STATIC_DRAW);
 
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 glEnableVertexAttribArray(0);
+
+glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+glEnableVertexAttribArray(1);
 
 m_chunkIndexCount = mesh.indices.size();
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
@@ -141,7 +144,6 @@ void Application::run() {
         int projLoc = glGetUniformLocation(m_shaderProgram, "projection");
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        glVertexAttrib3f(1, 0.3f, 0.7f, 0.3f);
         glBindVertexArray(m_chunkVao);
         glDrawElements(GL_TRIANGLES, m_chunkIndexCount, GL_UNSIGNED_INT, 0);
         SDL_GL_SwapWindow(m_window.handle());

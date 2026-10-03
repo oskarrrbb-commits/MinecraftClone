@@ -1,6 +1,7 @@
 #pragma once 
 #include <array>
 #include <vector>
+#include <glm/glm.hpp>
 #include "Block.h"
 struct MeshData {
     std::vector<float> vertices;
@@ -11,6 +12,7 @@ class Chunk {
         static const int CHUNK_SIZE = 16;
         Chunk();
         void generate();
+        glm::vec3 getBlockColor(BlockType type) const;
         BlockType getBlock(int x, int y, int z) const;
         void setBlock(int x, int y, int z, BlockType blockType);
         MeshData buildMesh() const;
