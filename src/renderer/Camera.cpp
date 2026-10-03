@@ -6,7 +6,7 @@
 #include <SDL3/SDL.h>
 #define MOVEMENT_SPEED 4.5f
 Camera::Camera()
-    : m_position(4.0f, 3.0f, 6.0f)
+    : m_position(8.0f, 20.0f, 40.0f)
     , m_up(0.0f, 1.0f, 0.0f)
     , m_front(0.0f, 0.0f, -1.0f)
     , m_yaw(-90.0f)
