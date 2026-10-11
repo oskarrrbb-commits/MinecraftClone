@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../world/Chunk.h"
+#include "../world/ChunkManager.h"
 const char* vertexShaderSource = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
@@ -39,29 +40,39 @@ Application::Application()
     , m_camera()
 {
     SDL_SetWindowRelativeMouseMode(m_window.handle(), true);
-    Chunk chunk;
-chunk.generate();
-MeshData mesh = chunk.buildMesh();
+    for (int x = 0; x < 2; ++x) {
+        for (int z = 0; z < 2; ++z) {
+            m_chunkManager.generateChunk(x, z);
+            Chunk* chunkPtr = m_chunkManager.getChunk(x, z);
+            MeshData mesh = chunkPtr->buildMesh();
 
-glGenVertexArrays(1, &m_chunkVao);
-glGenBuffers(1, &m_chunkVbo);
-glGenBuffers(1, &m_chunkEbo);
+            ChunkRenderData renderData;
+            renderData.worldOffset = glm::vec3(x * Chunk::CHUNK_SIZE, 0, z * Chunk::CHUNK_SIZE);
 
-glBindVertexArray(m_chunkVao);
+            glGenVertexArrays(1, &renderData.vao);
+            glGenBuffers(1, &renderData.vbo);
+            glGenBuffers(1, &renderData.ebo);
 
-glBindBuffer(GL_ARRAY_BUFFER, m_chunkVbo);
-glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(float), mesh.vertices.data(), GL_STATIC_DRAW);
+            glBindVertexArray(renderData.vao);
 
-glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_chunkEbo);
-glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(unsigned int), mesh.indices.data(), GL_STATIC_DRAW);
+            glBindBuffer(GL_ARRAY_BUFFER, renderData.vbo);
+            glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(float), mesh.vertices.data(), GL_STATIC_DRAW);
 
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-glEnableVertexAttribArray(0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderData.ebo);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(unsigned int), mesh.indices.data(), GL_STATIC_DRAW);
 
-glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-glEnableVertexAttribArray(1);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+            glEnableVertexAttribArray(0);
 
-m_chunkIndexCount = mesh.indices.size();
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+            glEnableVertexAttribArray(1);
+
+            renderData.indexCount = mesh.indices.size();
+
+            m_chunkRenderData.push_back(renderData);
+        }
+    }
+
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     glEnable(GL_DEPTH_TEST);
     glGenVertexArrays(1, &m_vao);
@@ -144,8 +155,16 @@ void Application::run() {
         int projLoc = glGetUniformLocation(m_shaderProgram, "projection");
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        glBindVertexArray(m_chunkVao);
-        glDrawElements(GL_TRIANGLES, m_chunkIndexCount, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(m_vao);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+        for (const ChunkRenderData& chunkData : m_chunkRenderData) {
+            glm::mat4 chunkModel = glm::translate(glm::mat4(1.0f), chunkData.worldOffset);
+            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(chunkModel));
+
+            glBindVertexArray(chunkData.vao);
+            glDrawElements(GL_TRIANGLES, chunkData.indexCount, GL_UNSIGNED_INT, 0);
+        }
         SDL_GL_SwapWindow(m_window.handle());
     }
 }
