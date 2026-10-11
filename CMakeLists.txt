@@ -40,3 +40,4 @@ target_include_directories(MinecraftClone PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include
 )
 target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static glad glm::glm)
+target_link_options(MinecraftClone PRIVATE -static-libgcc -static-libstdc++ -static)

@@ -46,11 +46,11 @@ void Chunk::generate(){
     for(int x = 0; x < Chunk::CHUNK_SIZE; ++x) {
         for (int y = 0; y < Chunk::CHUNK_SIZE; ++y) {
             for (int z = 0; z < Chunk::CHUNK_SIZE; ++z) {
-                if (y == 0) {
+                if (y == Chunk::CHUNK_SIZE - 1) {
                     setBlock(x, y, z, BlockType::Grass);
-                } else if (y < 4) {
+                } else if (y > 8) {
                     setBlock(x, y, z, BlockType::Dirt);
-                } else if (y < 8) {
+                } else if (y <= 8) {
                     setBlock(x, y, z, BlockType::Stone);
                 } else {
                     setBlock(x, y, z, BlockType::Air);
