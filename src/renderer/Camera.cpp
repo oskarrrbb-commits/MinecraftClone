@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <SDL3/SDL.h>
-#define MOVEMENT_SPEED 4.5f
+constexpr float MOVEMENT_SPEED = 4.5f;
 Camera::Camera()
     : m_position(8.0f, 20.0f, 40.0f)
     , m_up(0.0f, 1.0f, 0.0f)
@@ -32,7 +32,7 @@ void Camera::processKeyboard(const bool* keyState, float deltaTime) {
         m_position += glm::normalize(glm::cross(m_front, m_up)) * velocity;
     }
 }
-void Camera::ProcessMouseMovement(float xOffset, float yOffset) {
+void Camera::processMouseMovement(float xOffset, float yOffset) {
     float sensitivity = 0.1f;
     xOffset *= sensitivity;
     yOffset *= sensitivity;

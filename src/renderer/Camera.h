@@ -4,7 +4,7 @@
 class Camera {
 public:
     void processKeyboard(const bool* keyState, float deltaTime);
-    void ProcessMouseMovement(float xOffset, float yOffset);
+    void processMouseMovement(float xOffset, float yOffset);
     glm::mat4 getViewMatrix() const;
     Camera();
 private:

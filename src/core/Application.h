@@ -68,7 +68,7 @@ private:
     unsigned int m_ebo = 0;
     std::vector<ChunkRenderData> m_chunkRenderData;
     ChunkManager m_chunkManager;
-    Uint64 m_lastFrameTime = SDL_GetTicks();
+    Uint64 m_lastFrameTime = 0;
     float m_deltaTime = 0.0f;
     void ProcessEvents();
 };

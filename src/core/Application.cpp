@@ -131,6 +131,7 @@ Application::Application()
 }
 
 void Application::run() {
+    m_lastFrameTime = SDL_GetTicks();
     while (m_running) {
         Uint64 currentTime = SDL_GetTicks();
         m_deltaTime = (currentTime - m_lastFrameTime) / 1000.0f;
@@ -176,7 +177,7 @@ void Application::ProcessEvents() {
             m_running = false;
         }
         if (event.type == SDL_EVENT_MOUSE_MOTION) {
-            m_camera.ProcessMouseMovement(event.motion.xrel, event.motion.yrel);
+            m_camera.processMouseMovement(event.motion.xrel, event.motion.yrel);
         }
     }
 }
