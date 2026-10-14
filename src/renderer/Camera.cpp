@@ -19,18 +19,16 @@ glm::mat4 Camera::getViewMatrix() const {
 
 void Camera::processKeyboard(const bool* keyState, float deltaTime) {
     float velocity = MOVEMENT_SPEED * deltaTime;
-    if (keyState[SDL_SCANCODE_W]) {
-        m_position += m_front * velocity;
-    }
-    if (keyState[SDL_SCANCODE_S]) {
-        m_position -= m_front * velocity;
-    }
-    if (keyState[SDL_SCANCODE_A]) {
-        m_position -= glm::normalize(glm::cross(m_front, m_up)) * velocity;
-    }
-    if (keyState[SDL_SCANCODE_D]) {
-        m_position += glm::normalize(glm::cross(m_front, m_up)) * velocity;
-    }
+    glm::vec3 direction(0.0f);
+    glm::vec3 right = glm::normalize(glm::cross(m_front, m_up));
+    if (keyState[SDL_SCANCODE_W]) direction += m_front;
+    if (keyState[SDL_SCANCODE_S]) direction -= m_front;
+    if (keyState[SDL_SCANCODE_A]) direction -= right;
+    if (keyState[SDL_SCANCODE_D]) direction += right;
+    if (glm::length(direction) > 0.0f) {
+    direction = glm::normalize(direction);
+    m_position += direction * velocity;
+}
 }
 void Camera::processMouseMovement(float xOffset, float yOffset) {
     float sensitivity = 0.1f;
