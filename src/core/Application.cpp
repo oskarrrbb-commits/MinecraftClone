@@ -46,30 +46,8 @@ Application::Application()
             Chunk* chunkPtr = m_chunkManager.getChunk(x, z);
             MeshData mesh = chunkPtr->buildMesh();
 
-            ChunkRenderData renderData;
-            renderData.worldOffset = glm::vec3(x * Chunk::CHUNK_SIZE, 0, z * Chunk::CHUNK_SIZE);
+            m_chunkRenderData.push_back({ Mesh(mesh.vertices, mesh.indices), glm::vec3(x * Chunk::CHUNK_SIZE, 0, z * Chunk::CHUNK_SIZE) });
 
-            glGenVertexArrays(1, &renderData.vao);
-            glGenBuffers(1, &renderData.vbo);
-            glGenBuffers(1, &renderData.ebo);
-
-            glBindVertexArray(renderData.vao);
-
-            glBindBuffer(GL_ARRAY_BUFFER, renderData.vbo);
-            glBufferData(GL_ARRAY_BUFFER, mesh.vertices.size() * sizeof(float), mesh.vertices.data(), GL_STATIC_DRAW);
-
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderData.ebo);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indices.size() * sizeof(unsigned int), mesh.indices.data(), GL_STATIC_DRAW);
-
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-            glEnableVertexAttribArray(0);
-
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-            glEnableVertexAttribArray(1);
-
-            renderData.indexCount = mesh.indices.size();
-
-            m_chunkRenderData.push_back(renderData);
         }
     }
 
@@ -141,8 +119,7 @@ void Application::run() {
             glm::mat4 chunkModel = glm::translate(glm::mat4(1.0f), chunkData.worldOffset);
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(chunkModel));
 
-            glBindVertexArray(chunkData.vao);
-            glDrawElements(GL_TRIANGLES, chunkData.indexCount, GL_UNSIGNED_INT, 0);
+            chunkData.mesh.draw();
         }
         SDL_GL_SwapWindow(m_window.handle());
     }

@@ -6,11 +6,10 @@
 #include <SDL3/SDL.h>
 #include "../world/ChunkManager.h"
 #include <vector>
+#include "../renderer/Mesh.h"
+
 struct ChunkRenderData {
-    unsigned int vao = 0;
-    unsigned int vbo = 0;
-    unsigned int ebo = 0;
-    unsigned int indexCount = 0;
+    Mesh mesh;
     glm::vec3 worldOffset;
 };
 class Application {
