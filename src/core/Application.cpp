@@ -43,6 +43,12 @@ Application::Application()
     for (int x = 0; x < 2; ++x) {
         for (int z = 0; z < 2; ++z) {
             m_chunkManager.generateChunk(x, z);
+            
+
+        }
+    }
+    for (int x = 0; x < 2; ++x) {
+        for (int z = 0; z < 2; ++z) {
             Chunk* chunkPtr = m_chunkManager.getChunk(x, z);
             MeshData mesh = chunkPtr->buildMesh();
 
@@ -50,6 +56,7 @@ Application::Application()
 
         }
     }
+    
 
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     glEnable(GL_DEPTH_TEST);

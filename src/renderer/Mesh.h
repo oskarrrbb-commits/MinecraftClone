@@ -10,7 +10,7 @@ public:
     Mesh& operator=(const Mesh&) = delete;
 
     Mesh(Mesh&& other) noexcept;
-    Mesh& operator=(Mesh&& other) noexcept;
+    Mesh& operator=(Mesh&& other) = delete;
 
     void draw() const;
 

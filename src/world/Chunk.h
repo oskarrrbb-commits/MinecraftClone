@@ -22,5 +22,3 @@ class Chunk {
         int index(int x, int y, int z) const;
            
 };
-
-
