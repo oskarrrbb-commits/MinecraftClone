@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "../world/Chunk.h"
 #include "../world/ChunkManager.h"
+
 const char* vertexShaderSource = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
@@ -47,11 +48,12 @@ Application::Application()
 
         }
     }
+    m_chunkManager.getChunk(1, 0)->setBlock(2, 2, 11, BlockType::Air);
     for (int x = 0; x < 2; ++x) {
         for (int z = 0; z < 2; ++z) {
             Chunk* chunkPtr = m_chunkManager.getChunk(x, z);
-            MeshData mesh = chunkPtr->buildMesh();
-
+            MeshData mesh = chunkPtr->buildMesh(ChunkNeighbors{m_chunkManager.getChunk(x + 1, z), m_chunkManager.getChunk(x - 1, z), m_chunkManager.getChunk(x, z + 1), m_chunkManager.getChunk(x, z - 1)});
+            printf("%zu\n",mesh.indices.size() / 6);
             m_chunkRenderData.push_back({ Mesh(mesh.vertices, mesh.indices), glm::vec3(x * Chunk::CHUNK_SIZE, 0, z * Chunk::CHUNK_SIZE) });
 
         }

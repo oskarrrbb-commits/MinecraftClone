@@ -29,6 +29,32 @@ BlockType Chunk::getBlock(int x, int y, int z) const {
 void Chunk::setBlock(int x, int y, int z, BlockType blockType) {
     m_blocks[index(x, y, z)] = blockType;
 }
+bool Chunk::isAir(int x, int y, int z, const ChunkNeighbors& neighbors) const{
+    if (y < 0 || y >= CHUNK_SIZE) {
+            return true;
+        } else if(x >= CHUNK_SIZE && neighbors.posX == nullptr){
+            return true;   
+        } else if(x >= CHUNK_SIZE && neighbors.posX != nullptr){
+            return neighbors.posX->getBlock(x - CHUNK_SIZE, y, z) == BlockType::Air;
+        }else if(x < 0 && neighbors.negX == nullptr){
+            return true;   
+        } else if(x < 0 && neighbors.negX != nullptr){
+            return neighbors.negX->getBlock(x + CHUNK_SIZE, y, z) == BlockType::Air;
+        }
+        else if(z >= CHUNK_SIZE && neighbors.posZ == nullptr){
+            return true;   
+        } else if(z >= CHUNK_SIZE && neighbors.posZ != nullptr){
+            return neighbors.posZ->getBlock(x, y, z - CHUNK_SIZE) == BlockType::Air;
+        }
+        else if(z < 0 && neighbors.negZ == nullptr){
+            return true;   
+        } else if(z < 0 && neighbors.negZ != nullptr){
+            return neighbors.negZ->getBlock(x, y, z + CHUNK_SIZE) == BlockType::Air;
+        }
+        else {
+            return getBlock(x, y, z) == BlockType::Air;
+        }
+}
 glm::vec3 Chunk::getBlockColor(BlockType blockType) const {
     switch (blockType) {
         case BlockType::Dirt:
@@ -59,7 +85,7 @@ void Chunk::generate(){
         }
     }
 }
-MeshData Chunk::buildMesh() const {
+MeshData Chunk::buildMesh(const ChunkNeighbors& neighbors) const {
     MeshData result;
     for(int x = 0; x < CHUNK_SIZE; ++x) {
         for (int y = 0; y < CHUNK_SIZE; ++y) {
@@ -72,14 +98,7 @@ MeshData Chunk::buildMesh() const {
                     int ny = y + neighborOffsets[face][1];
                     int nz = z + neighborOffsets[face][2];
 
-                    bool neighborIsAir;
-                    if (nx < 0 || nx >= CHUNK_SIZE || ny < 0 || ny >= CHUNK_SIZE || nz < 0 || nz >= CHUNK_SIZE) {
-                        neighborIsAir = true;
-                    } else {
-                        neighborIsAir = (getBlock(nx, ny, nz) == BlockType::Air);
-                    }
-
-                    if (neighborIsAir) {
+                    if (isAir(nx, ny, nz, neighbors)) {
                         unsigned int base =result.vertices.size() / 6;
                         for (int corner = 0; corner < 4; ++corner) {
                             float ox = faceVertexOffsets[face][corner * 3 + 0];
