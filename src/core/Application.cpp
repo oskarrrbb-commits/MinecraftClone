@@ -39,6 +39,7 @@ Application::Application()
     : m_window("MinecraftClone", 1280, 720)
     , m_glContext(m_window)
     , m_camera()
+    , m_shader(vertexShaderSource, fragmentShaderSource)
 {
     SDL_SetWindowRelativeMouseMode(m_window.handle(), true);
     for (int x = 0; x < 2; ++x) {
@@ -48,12 +49,10 @@ Application::Application()
 
         }
     }
-    m_chunkManager.getChunk(1, 0)->setBlock(2, 2, 11, BlockType::Air);
     for (int x = 0; x < 2; ++x) {
         for (int z = 0; z < 2; ++z) {
             Chunk* chunkPtr = m_chunkManager.getChunk(x, z);
             MeshData mesh = chunkPtr->buildMesh(ChunkNeighbors{m_chunkManager.getChunk(x + 1, z), m_chunkManager.getChunk(x - 1, z), m_chunkManager.getChunk(x, z + 1), m_chunkManager.getChunk(x, z - 1)});
-            printf("%zu\n",mesh.indices.size() / 6);
             m_chunkRenderData.push_back({ Mesh(mesh.vertices, mesh.indices), glm::vec3(x * Chunk::CHUNK_SIZE, 0, z * Chunk::CHUNK_SIZE) });
 
         }
@@ -62,42 +61,8 @@ Application::Application()
 
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     glEnable(GL_DEPTH_TEST);
-
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-    glCompileShader(vertexShader);
-
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        printf("Vertex shader compile error: %s\n", infoLog);
-    }
-
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-    glCompileShader(fragmentShader);
-
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        printf("Fragment shader compile error: %s\n", infoLog);
-    }
-
-    m_shaderProgram = glCreateProgram();
-    glAttachShader(m_shaderProgram, vertexShader);
-    glAttachShader(m_shaderProgram, fragmentShader);
-    glLinkProgram(m_shaderProgram);
-
-    glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(m_shaderProgram, 512, nullptr, infoLog);
-        printf("Shader link error: %s\n", infoLog);
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    printf("Shader program ID: %u\n", m_shader.id());
+    
 }
 
 void Application::run() {
@@ -112,16 +77,16 @@ void Application::run() {
         ProcessEvents();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glUseProgram(m_shaderProgram);
+        m_shader.use();
 
-        int modelLoc = glGetUniformLocation(m_shaderProgram, "model");
+        int modelLoc = glGetUniformLocation(m_shader.id(), "model");
 
         glm::mat4 view = m_camera.getViewMatrix();
-        int viewLoc = glGetUniformLocation(m_shaderProgram, "view");
+        int viewLoc = glGetUniformLocation(m_shader.id(), "view");
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 1280.0f / 720.0f, 0.1f, 100.0f);
-        int projLoc = glGetUniformLocation(m_shaderProgram, "projection");
+        int projLoc = glGetUniformLocation(m_shader.id(), "projection");
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         for (const ChunkRenderData& chunkData : m_chunkRenderData) {

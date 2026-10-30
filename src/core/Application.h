@@ -7,6 +7,7 @@
 #include "../world/ChunkManager.h"
 #include <vector>
 #include "../renderer/Mesh.h"
+#include "../renderer/Shader.h"
 
 struct ChunkRenderData {
     Mesh mesh;
@@ -20,9 +21,9 @@ private:
     SDLContext m_sdl;
     Window m_window;
     GLContext m_glContext;
+    Shader m_shader;
     Camera m_camera;
     bool m_running = true;
-    unsigned int m_shaderProgram = 0;
     std::vector<ChunkRenderData> m_chunkRenderData;
     ChunkManager m_chunkManager;
     Uint64 m_lastFrameTime = 0;

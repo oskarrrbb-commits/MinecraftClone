@@ -36,6 +36,7 @@ add_executable(MinecraftClone
     src/world/Chunk.cpp
     src/world/ChunkManager.cpp
     src/renderer/Mesh.cpp
+    src/renderer/Shader.cpp
 )
 target_include_directories(MinecraftClone PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include
