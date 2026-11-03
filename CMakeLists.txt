@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.20)
 project(MinecraftClone)
 
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
+
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
@@ -38,8 +42,10 @@ add_executable(MinecraftClone
     src/renderer/Mesh.cpp
     src/renderer/Shader.cpp
 )
-target_include_directories(MinecraftClone PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/glad/include
-)
+
+target_compile_features(MinecraftClone PRIVATE cxx_std_17)
+set_target_properties(MinecraftClone PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_options(MinecraftClone PRIVATE -Wall -Wextra)
+
 target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static glad glm::glm)
 target_link_options(MinecraftClone PRIVATE -static-libgcc -static-libstdc++ -static)
