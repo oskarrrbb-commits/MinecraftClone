@@ -38,18 +38,18 @@ void main() {
 Application::Application()
     : m_window("MinecraftClone", 1280, 720)
     , m_glContext(m_window)
-    , m_camera()
     , m_shader(vertexShaderSource, fragmentShaderSource)
+    , m_camera()
 {
     SDL_SetWindowRelativeMouseMode(m_window.handle(), true);
-    for (int x = 0; x < 2; ++x) {
+    for (int x = 0; x < 4; ++x) {
         for (int z = 0; z < 2; ++z) {
             m_chunkManager.generateChunk(x, z);
             
 
         }
     }
-    for (int x = 0; x < 2; ++x) {
+    for (int x = 0; x < 4; ++x) {
         for (int z = 0; z < 2; ++z) {
             Chunk* chunkPtr = m_chunkManager.getChunk(x, z);
             MeshData mesh = chunkPtr->buildMesh(ChunkNeighbors{m_chunkManager.getChunk(x + 1, z), m_chunkManager.getChunk(x - 1, z), m_chunkManager.getChunk(x, z + 1), m_chunkManager.getChunk(x, z - 1)});

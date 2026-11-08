@@ -1,10 +1,10 @@
 #include "SDLContext.h"
 #include <SDL3/SDL.h>
-#include <cstdio>
+#include <stdexcept>
 
 SDLContext::SDLContext() {
     if (!SDL_Init(SDL_INIT_VIDEO)) {
-        printf("SDL failed to init: %s\n", SDL_GetError());
+        throw std::runtime_error(std::string("Failed to initialize SDL: ") + SDL_GetError());
     }
 }
 
