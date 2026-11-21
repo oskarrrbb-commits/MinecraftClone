@@ -61,6 +61,7 @@ Application::Application()
 
     glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
     printf("Shader program ID: %u\n", m_shader.id());
     
 }

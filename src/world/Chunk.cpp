@@ -11,8 +11,8 @@ static const int neighborOffsets[6][3] = {
 static const float faceVertexOffsets[6][12] = {
     {1,0,0, 1,1,0, 1,1,1, 1,0,1},
     {0,0,1, 0,1,1, 0,1,0, 0,0,0},
-    {0,1,0, 1,1,0, 1,1,1, 0,1,1},
-    {0,0,1, 1,0,1, 1,0,0, 0,0,0},
+    {0,1,0, 0,1,1, 1,1,1, 1,1,0},
+    {0,0,1, 0,0,0, 1,0,0, 1,0,1},
     {1,0,1, 1,1,1, 0,1,1, 0,0,1},
     {0,0,0, 0,1,0, 1,1,0, 1,0,0},
 };
@@ -112,12 +112,17 @@ MeshData Chunk::buildMesh(const ChunkNeighbors& neighbors) const {
                             result.vertices.push_back(color.g);
                             result.vertices.push_back(color.b);
                         }
+                        
                         result.indices.push_back(base + 0);
                         result.indices.push_back(base + 1);
                         result.indices.push_back(base + 2);
                         result.indices.push_back(base + 2);
                         result.indices.push_back(base + 3);
                         result.indices.push_back(base + 0);
+                        
+                        
+                        
+                        
                         
                 }
             }
