@@ -49,6 +49,7 @@ target_compile_options(world PRIVATE -Wall -Wextra)
 
 add_executable(world_tests 
     tests/ChunkTests.cpp
+    tests/FaceTableTests.cpp
 )
 target_link_libraries(world_tests PRIVATE world GTest::gtest_main)
 include(GoogleTest)

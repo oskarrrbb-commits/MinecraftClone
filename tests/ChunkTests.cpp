@@ -42,3 +42,13 @@ TEST(ChunkTests, SolidSlabHasOnlyOuterFaces) {
     EXPECT_EQ(mesh.vertices.size(), 24576u);
     EXPECT_EQ(mesh.indices.size(), 6144u);
 }
+TEST(ChunkTests, MissingNeighborCountsAsAir) {
+    Chunk a;
+    a.setBlock(15, 5, 5, BlockType::Dirt);
+    ChunkNeighbors neighbors;
+    neighbors.posX = nullptr;
+    MeshData mesh = a.buildMesh(neighbors);
+
+    EXPECT_EQ(mesh.vertices.size(), 144u);
+    EXPECT_EQ(mesh.indices.size(), 36u);
+}

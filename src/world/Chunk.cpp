@@ -1,21 +1,8 @@
 #include "Chunk.h"
 #include <vector>
 #include <glm/glm.hpp>
+#include "FaceTables.h"
 
-static const int neighborOffsets[6][3] = {
-    { 1, 0, 0}, {-1, 0, 0},
-    { 0, 1, 0}, { 0,-1, 0},
-    { 0, 0, 1}, { 0, 0,-1},
-};
-
-static const float faceVertexOffsets[6][12] = {
-    {1,0,0, 1,1,0, 1,1,1, 1,0,1},
-    {0,0,1, 0,1,1, 0,1,0, 0,0,0},
-    {0,1,0, 0,1,1, 1,1,1, 1,1,0},
-    {0,0,1, 0,0,0, 1,0,0, 1,0,1},
-    {1,0,1, 1,1,1, 0,1,1, 0,0,1},
-    {0,0,0, 0,1,0, 1,1,0, 1,0,0},
-};
 Chunk::Chunk(){
     m_blocks.fill(BlockType::Air);
 };
