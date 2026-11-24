@@ -74,4 +74,6 @@ set_target_properties(MinecraftClone PROPERTIES CXX_EXTENSIONS OFF)
 target_compile_options(MinecraftClone PRIVATE -Wall -Wextra)
 
 target_link_libraries(MinecraftClone PRIVATE SDL3::SDL3-static glad glm::glm world)
-target_link_options(MinecraftClone PRIVATE -static-libgcc -static-libstdc++ -static)
+if(MINGW)
+    target_link_options(MinecraftClone PRIVATE -static-libgcc -static-libstdc++ -static)
+endif()
