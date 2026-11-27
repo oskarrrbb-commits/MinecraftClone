@@ -1,5 +1,5 @@
 # MinecraftClone
-
+[![CI](https://github.com/oskarrrbb-commits/MinecraftClone/actions/workflows/ci.yml/badge.svg)](https://github.com/oskarrrbb-commits/MinecraftClone/actions/workflows/ci.yml)
 A small voxel engine inspired by Minecraft, written in C++ with OpenGL 3.3, as a learning project.
 
 Right now it generates a 2×2 grid of 16×16×16 chunks (stone, dirt and grass layers), builds a mesh per chunk that skips hidden faces, and lets you fly around with a free camera.
